@@ -1,6 +1,9 @@
 <template>
   <div>
-    SHOW
+    DEFAULT LAYOUTS
+  </div>
+  <div>
+    <slot />
   </div>
 </template>
 
@@ -8,5 +11,5 @@
 
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 </style>
