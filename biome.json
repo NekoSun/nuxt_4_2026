@@ -53,16 +53,6 @@
 			"formatter": {
 				"indentStyle": "space",
 				"indentWidth": 2
-			},
-			"javascript": {
-				"globals": [
-					"defineEmits",
-					"defineProps",
-					"defineExpose",
-					"defineModel",
-					"defineOptions",
-					"defineSlots"
-				]
 			}
 		}
 	]

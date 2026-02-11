@@ -1,9 +1,16 @@
 <template>
   <div class="mx-auto w-1/2 p-4">
     <div>
-      <PostItem></PostItem>
+      <div class="mb-4">
+        <NuxtLink
+          :to="{ name: 'posts-create' }"
+          class="inline-block text-xs text-white px-3 py-2 bg-sky-600 border border-sky-700"
+        >
+          CREATE POST
+        </NuxtLink>
+      </div>
       <div
-        v-for="post in postsData"
+        v-for="post in posts"
         class="bg-white w-full p-4 border border-gray-200 mb-4"
       >
         <h3 class="mb-2 text-lg text-gray-700">
@@ -12,30 +19,38 @@
           </NuxtLink>
         </h3>
         <p class="text-xs text-gray-500">{{ post.content }}</p>
-        <NuxtLink :to="{ name: 'posts-id-edit', params: { id: post.id } }">Edit</NuxtLink>
+        <div>
+          <NuxtLink :to="{ name: 'posts-id-edit', params: { id: post.id } }">EDIT</NuxtLink>
+        </div>
+        <div><a
+            @click="deletePost(post)"
+            href="#"
+            class="text-red-600"
+          >DELETE</a></div>
       </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import type { PostsData } from '@/types/posts';
 
 definePageMeta({
-	layout: "main",
+  layout: "main",
 });
 
 useHead({
-	title: "My App",
-	meta: [{ name: "description", content: "My amazing site." }],
-	bodyAttrs: {
-		class: "test",
-	},
+  title: "My App",
+  meta: [{ name: "description", content: "My amazing site." }],
+  bodyAttrs: {
+    class: "test",
+  },
 });
 
-const { data: postsData } = await useFetch<PostsData[]>(
-	"http://localhost:5000/poste",
-);
+const {getPosts, deletePost} = usePost();
+
+const posts = await getPosts();
+
+
 </script>
 
 <style scoped></style>
