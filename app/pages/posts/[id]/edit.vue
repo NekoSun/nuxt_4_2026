@@ -18,7 +18,7 @@
       <div class="mb-4">
           <a
             href="#"
-            @click.prevent="postStore.updatePost()"
+            @click.prevent="postStore.updatePost"
             class="inline-block text-xs text-white px-3 py-2 bg-emerald-600 border border-emerald-700"
           >
             UPDATE

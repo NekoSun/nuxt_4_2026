@@ -1,66 +1,61 @@
+import { reactive, ref } from 'vue';
 import type { RouteLocationNormalizedLoadedGeneric } from 'vue-router';
 import type { PostsData } from '@/types/posts';
 
-interface State {
-    post: PostsData;
-    posts: PostsData[] | [];
-}
+export const usePostStore = defineStore('postStore', () => {
+    const posts = ref<PostsData[]>([]);
+    const post = reactive<PostsData>({
+        id: '',
+        title: '',
+        content: '',
+    });
 
-export const usePostStore = defineStore('postStore', {
-    state: (): State => ({
-        post: {
+    const getPosts = async () => {
+        const { data } = await useFetch<PostsData[]>('http://localhost:5000/poste');
+
+        if (data.value?.length) {
+            posts.value = data.value;
+        }
+    };
+
+    const getPost = async (route: RouteLocationNormalizedLoadedGeneric) => {
+        const { data } = await useFetch<PostsData>(
+            `http://localhost:5000/poste/${route.params.id}`,
+        );
+
+        if (data.value) {
+            Object.assign(post, data.value);
+        }
+    };
+
+    const storePost = async (post: PostsData) => {
+        await $fetch('http://localhost:5000/poste', {
+            method: 'POST',
+            body: post,
+        });
+
+        Object.assign(post, {
             title: '',
             content: '',
-        },
-        posts: [],
-    }),
-    actions: {
-        async getPosts() {
-            const { data } = await useFetch<PostsData[]>(
-                'http://localhost:5000/poste',
-            );
+        });
+    };
 
-            if (data.value?.length) {
-                this.posts = data.value;
-            }
-        },
+    const updatePost = async () => {
+        await $fetch(`http://localhost:5000/poste/${post.id}`, {
+            method: 'PATCH',
+            body: post,
+        });
+    };
 
-        async getPost(route: RouteLocationNormalizedLoadedGeneric) {
-            const { data } = await useFetch<PostsData>(
-                `http://localhost:5000/poste/${route.params.id}`,
-            );
+    const deletePost = async (post: PostsData) => {
+        await $fetch(`http://localhost:5000/poste/${post.id}`, {
+            method: 'DELETE',
+        });
 
-            if (data.value) {
-                this.post = data.value;
-            }
-        },
+        // await refreshPosts();
 
-        async storePost() {
-            await $fetch('http://localhost:5000/poste', {
-                method: 'POST',
-                body: this.post
-            })
+        posts.value = posts.value?.filter((postItem) => postItem !== post);
+    };
 
-            this.post = {
-                title: '',
-                content: '',
-            }
-        },
-        async updatePost() {
-            await $fetch(`http://localhost:5000/poste/${this.post.id}`, {
-                method: 'PATCH',
-                body: this.post,
-            });
-        },
-
-        async deletePost(post: PostsData) {
-            await $fetch(`http://localhost:5000/poste/${post.id}`, {
-                method: 'DELETE'
-            })
-
-            // await refreshPosts();
-
-            this.posts = this.posts?.filter(postItem => postItem !== post);
-        }
-    },
+    return { post, posts, getPosts, getPost, storePost, updatePost, deletePost };
 });
