@@ -47,8 +47,12 @@ useHead({
 });
 
 const postStore = usePostStore();
+const {$hello} = useNuxtApp()
+
+$hello(getRadomNumber())
 
 await postStore.getPosts();
+
 
 
 </script>
