@@ -3,7 +3,7 @@
     <div>
       <div class="mb-4">
         <input
-          v-model="post.title"
+          v-model="postStore.post.title"
           type="text"
           placeholder="title"
           class="w-full border border-gray-200 p-4"
@@ -11,7 +11,7 @@
       </div>
       <div class="mb-4">
         <textarea
-          v-model="post.content"
+          v-model="postStore.post.content"
           placeholder="content"
           class="w-full border border-gray-200 p-4"
         ></textarea>
@@ -19,7 +19,7 @@
       <div class="mb-4">
         <a
           href="#"
-          @click.prevent="storePost(post)"
+          @click.prevent="postStore.storePost"
           class="inline-block text-xs text-white px-3 py-2 bg-emerald-600 border border-emerald-700"
         >
           STORE
@@ -30,22 +30,20 @@
 </template>
 
 <script setup lang="ts">
-import { reactive } from 'vue';
-
+import { onMounted } from 'vue';
 
 definePageMeta({
-  layout: 'main'
-})
+  layout: 'main',
+});
 
-const {storePost} = usePost();
+const postStore = usePostStore();
 
-
-const post = reactive({
-  title: '',
-  content: ''
-})
-
-
+onMounted(() => {
+  postStore.post = {
+    title: '',
+    content: '',
+  };
+});
 </script>
 
 <style scoped></style>

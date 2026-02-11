@@ -4,8 +4,8 @@
       <div
         class="bg-white w-full p-4 border border-gray-200 mb-4"
       >
-        <h3 class="mb-2 text-lg text-gray-700">{{ post?.title }} </h3>
-        <p class="text-xs text-gray-500">{{ post?.content }}</p>
+        <h3 class="mb-2 text-lg text-gray-700">{{ postStore.post.title }} </h3>
+        <p class="text-xs text-gray-500">{{ postStore.post.content }}</p>
       </div>
     </div>
   </div>
@@ -13,8 +13,10 @@
 
 <script setup lang="ts">
 
-const {getPost} = usePost();
-const post = await getPost();
+const postStore = usePostStore();
+
+await postStore.getPost(useRoute());
+
 </script>
 
 <style scoped></style>

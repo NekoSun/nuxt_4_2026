@@ -10,7 +10,7 @@
         </NuxtLink>
       </div>
       <div
-        v-for="post in posts"
+        v-for="post in postStore.posts"
         class="bg-white w-full p-4 border border-gray-200 mb-4"
       >
         <h3 class="mb-2 text-lg text-gray-700">
@@ -23,7 +23,7 @@
           <NuxtLink :to="{ name: 'posts-id-edit', params: { id: post.id } }">EDIT</NuxtLink>
         </div>
         <div><a
-            @click="deletePost(post)"
+            @click="postStore.deletePost(post)"
             href="#"
             class="text-red-600"
           >DELETE</a></div>
@@ -46,9 +46,9 @@ useHead({
   },
 });
 
-const {getPosts, deletePost} = usePost();
+const postStore = usePostStore();
 
-const posts = await getPosts();
+await postStore.getPosts();
 
 
 </script>
